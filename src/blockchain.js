@@ -74,8 +74,9 @@ class Blockchain {
 
             block.hash = SHA256(JSON.stringify(block)).toString();
             self.chain.push(block);
-            resolve(block);
             this.height += 1;
+            resolve(block);
+            block.validateChain();
            
         });
     }
@@ -147,7 +148,12 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-           
+           let block = self.chain.filter(b => b.hash === hash)[0];
+           if(block){
+               resolve(block);
+           }else {
+               reject("No Block found with the entered Hash");
+           }
         });
     }
 
@@ -163,7 +169,7 @@ class Blockchain {
             if(block){
                 resolve(block);
             } else {
-                resolve(null);
+                resolve("No Block found with the entered Height");
             }
         });
     }
@@ -178,7 +184,14 @@ class Blockchain {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
-            
+            // checking the whole blockchain and retrive the data and comparing it with the owner adress if it matches
+                self.chain.forEach(async block => {
+                    let data = await block.getBData();
+                    if(data===owner){
+                        stars.push(data);
+                    }
+                });
+            resolve(stars);
         });
     }
 
@@ -192,7 +205,20 @@ class Blockchain {
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
-            
+            self.chain.forEach(async (block, height) => {
+                if(height>0){
+                    let checkHash = self.chain[height-1].hash;
+                }
+                if (block.previousBlockHash != checkHash){
+                    errorLog.push("Previous Block Hash is not valid");
+                }  
+                await block.validate().then(function(isValid) {
+                    if (isValid == false) {
+                        errorLog.push('Invalid Block');
+                    }
+                });
+            });
+            resolve(errorLog);
         });
     }
 
