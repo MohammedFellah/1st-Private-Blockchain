@@ -64,6 +64,18 @@ class Blockchain {
     _addBlock(block) {
         let self = this;
         return new Promise(async (resolve, reject) => {
+            block.height = self.chain.length;
+            block.time = new Date().getTime().toString().slice(0,-3);
+            if (self.chain.length>0){
+                block.previousBlockHash = self.chain[self.chain.length-1].hash;
+            } else {
+                reject('error');
+            }
+
+            block.hash = SHA256(JSON.stringify(block)).toString();
+            self.chain.push(block);
+            resolve(block);
+            this.height += 1;
            
         });
     }
@@ -78,6 +90,8 @@ class Blockchain {
      */
     requestMessageOwnershipVerification(address) {
         return new Promise((resolve) => {
+            let time = new Date().getTime().toString().slice(0,-3);
+            resolve(address+":"+time+":"+starRegistry);
             
         });
     }
@@ -102,7 +116,25 @@ class Blockchain {
     submitStar(address, message, signature, star) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            
+            let messageTime = parseInt(message.split(':')[1]);
+            let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
+            //checking if time is lower than 5 minutes
+            if(messageTime-currentTime < 300){
+                //checking the signature
+                if (bitcoinMessage.verify(message, address, signature == true )){
+                    let newBlock = new BlockClass.Block({star: star, owner: address});
+                    // add the block to the chain & resolve with the block added
+                    resolve (await self._addBlock(newBlock));
+
+                }else { // return when the signature is failed
+                    reject ("Signature failed!")
+                }
+            // return when the time is greater than 5 minutes 
+            } else {
+                reject('Session Down - the time elapsed is More  than 5 minutes');
+
+            }
+
         });
     }
 
