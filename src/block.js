@@ -9,6 +9,7 @@
  *  run asynchronous.
  */
 
+const sha256 = require('crypto-js/sha256');
 const SHA256 = require('crypto-js/sha256');
 const hex2ascii = require('hex2ascii');
 
@@ -39,12 +40,19 @@ class Block {
         let self = this;
         return new Promise((resolve, reject) => {
             // Save in auxiliary variable the current block hash
-                                            
+            let currentHash = self.hash;
             // Recalculate the hash of the Block
             // Comparing if the hashes changed
             // Returning the Block is not valid
-            
+            let calculatedHash = SHA256(JSON.stringify(self)).toString();
+            if (calculatedHash != currentHash){
+                resolve(false + 'The block is not valid');
+
+            } 
             // Returning the Block is valid
+            else {
+                reject(true + 'The block is valid');
+            }
 
         });
     }
@@ -62,9 +70,19 @@ class Block {
         // Getting the encoded data saved in the Block
         // Decoding the data to retrieve the JSON representation of the object
         // Parse the data to an object to be retrieve.
+        let block=this;
+        return new Promise((resolve, reject) => {
+            if (block.height===0){
+                reject('This is the genesis Block!');
+            }
+            // Resolve with the data if the object isn't the Genesis block
+            else {
+                let data = JSON.parse(hex2ascii(block.body)).stringify();
+                resolve(data);
 
-        // Resolve with the data if the object isn't the Genesis block
+            }
 
+        });
     }
 
 }
