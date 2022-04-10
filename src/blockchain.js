@@ -188,16 +188,23 @@ class Blockchain {
      * Remember the star should be returned decoded.
      * @param {*} address 
      */
-    getStarsByWalletAddress (address) {
+     getStarsByWalletAddress (address) {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
             // checking the whole blockchain  retrieve  data and comparing it with the owner address if it matches
                 self.chain.forEach(async block => {
                     let data = await block.getBData();
-                    if(data===address){
+                    //checking if there is data
+                    if(data){
+                        // comparing owner address with the submitted address
+                        if(data.owner===address){
                         stars.push(data);
-                    }
+                        }
+                        else{
+                            console.log ('Addresses do not match, data.owner: ' , data.owner, " Address =", address);
+                        }
+                    }   
                 });
             resolve(stars);
         });

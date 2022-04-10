@@ -61,13 +61,13 @@ new ApplicationServer();
 
 /*  
 { 
-	"adress":"mpiqdQW2zPZz7saa9s1po7g1vK3ogxBzfu",
-	"signature":"H57XgoLNE06QFlYbbzb39ICMpA80h6zpS4jEOKauX8UKdba6PBc4p4XzRtHxmdbRMcfIfgmGl0AVTQy1XaoOp",
-	"message":"mpiqdQW2zPZz7saa9s1po7g1vK3ogxBzfu:1649585936:starRegistry",
-	"star":{
-         	"dec": "67° 55' 57.8",
-         	"ra": "17h 30m 7.0s",
-        	 "story": "This is my first start in the Blockchain :D"
+    "address":"mpiqdQW2zPZz7saa9s1po7g1vK3ogxBzfu",
+    "message":"mpiqdQW2zPZz7saa9s1po7g1vK3ogxBzfu:1649585936:starRegistry",
+	"signature":"H57XgoLNE06QFlYbbzb39ICMpA80h6zpS4jEOKauX8UKdba6PBc4p4XzRtHxmdbRMcfIfgmGl0AVTQy1XaoOp/A=",
+	"star": {
+         	"dec": "80° 55' 57.8",
+         	"ra": "06h 30m 7.0s",
+        	"story": "This is my first star in the Blockchain :D"
      		} 
-}		 
+}			 
  */
