@@ -64,20 +64,28 @@ class Blockchain {
     _addBlock(block) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            block.height = self.chain.length;
-            block.time = new Date().getTime().toString().slice(0,-3);
-            if (self.chain.length>0){
-                block.previousBlockHash = self.chain[self.chain.length-1].hash;
-            } else {
-                reject('error');
-            }
 
+            block.time = new Date().getTime().toString().slice(0,-3);
+            block.height = self.chain.length;
+
+            // Set previous block hash for non-genesis blocks
+            if (block.height>0){
+                block.previousBlockHash = self.chain[self.chain.length-1].hash;
+            }
+            // Compute block hash and push to chain
             block.hash = SHA256(JSON.stringify(block)).toString();
             self.chain.push(block);
             this.height += 1;
-            resolve(block);
-            block.validateChain();
-           
+
+            //checking if the chain is valid
+            self.validateChain().then(errorLog => {
+                    if (errorLog.length > 0) {
+                        self.chain.pop();
+                        reject(errorLog);
+                    } else {
+                        resolve(block);
+                    }  
+            });                     
         });
     }
 
@@ -91,8 +99,7 @@ class Blockchain {
      */
     requestMessageOwnershipVerification(address) {
         return new Promise((resolve) => {
-            let time = new Date().getTime().toString().slice(0,-3);
-            resolve(address+":"+time+":"+starRegistry);
+            resolve(`${address}:${new Date().getTime().toString().slice(0,-3)}:starRegistry`);
             
         });
     }
@@ -208,10 +215,11 @@ class Blockchain {
             self.chain.forEach(async (block, height) => {
                 if(height>0){
                     let checkHash = self.chain[height-1].hash;
+                    if (block.previousBlockHash != checkHash){
+                        const errorMsg = `Block #${height}, previous Block Hash is set to ${block.previousBlockHash} but actual Previous black hash is ${checkHash}`;
+                        errorLog.push(errorMsg);
+                    }  
                 }
-                if (block.previousBlockHash != checkHash){
-                    errorLog.push("Previous Block Hash is not valid");
-                }  
                 await block.validate().then(function(isValid) {
                     if (isValid == false) {
                         errorLog.push('Invalid Block');
