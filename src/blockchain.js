@@ -195,7 +195,7 @@ class Blockchain {
             // checking the whole blockchain  retrieve  data and comparing it with the owner address if it matches
                 self.chain.forEach(async block => {
                     let data = await block.getBData();
-                    if(data===owner){
+                    if(data===address){
                         stars.push(data);
                     }
                 });
