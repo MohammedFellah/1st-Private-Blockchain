@@ -55,3 +55,19 @@ class ApplicationServer {
 }
 
 new ApplicationServer();
+
+
+// subbmitting a star example 
+
+/*  
+{ 
+	"adress":"mpiqdQW2zPZz7saa9s1po7g1vK3ogxBzfu",
+	"signature":"H57XgoLNE06QFlYbbzb39ICMpA80h6zpS4jEOKauX8UKdba6PBc4p4XzRtHxmdbRMcfIfgmGl0AVTQy1XaoOp",
+	"message":"mpiqdQW2zPZz7saa9s1po7g1vK3ogxBzfu:1649585936:starRegistry",
+	"star":{
+         	"dec": "67° 55' 57.8",
+         	"ra": "17h 30m 7.0s",
+        	 "story": "This is my first start in the Blockchain :D"
+     		} 
+}		 
+ */

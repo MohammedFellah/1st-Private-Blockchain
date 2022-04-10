@@ -129,7 +129,8 @@ class Blockchain {
             //checking if time is lower than 5 minutes
             if(messageTime-currentTime < 300){
                 //checking the signature
-                if (bitcoinMessage.verify(message, address, signature == true )){
+                const verifyMessage = bitcoinMessage.verify(message, address, signature == true, null, true );
+                if (verifyMessage){
                     let newBlock = new BlockClass.Block({star: star, owner: address});
                     // add the block to the chain & resolve with the block added
                     resolve (await self._addBlock(newBlock));
