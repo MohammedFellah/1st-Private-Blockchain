@@ -188,27 +188,31 @@ class Blockchain {
      * Remember the star should be returned decoded.
      * @param {*} address 
      */
-     getStarsByWalletAddress (address) {
+     getStarsByWalletAddress(address) {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
-            // checking the whole blockchain  retrieve  data and comparing it with the owner address if it matches
-                self.chain.forEach(async block => {
-                    let data = await block.getBData();
-                    //checking if there is data
-                    if(data){
-                        // comparing owner address with the submitted address
-                        if(data.owner===address){
-                        stars.push(data);
-                        }
-                        else{
-                            console.log ('Addresses do not match, data.owner: ' , data.owner, " Address =", address);
-                        }
-                    }   
-                });
-            resolve(stars);
+          // checking the whole blockchain  retrieve  data and comparing it with the owner address if it matches
+          self.chain.forEach(async (block) => {
+            try {
+              let data = await block.getBData();
+              //checking if there is data
+              if (data) {
+                // comparing owner address with the submitted address
+                if (data.owner === address) {
+                  stars.push(data);
+                } else {
+                  console.log(
+                    "Addresses do not match, data.owner: ",data.owner," Address =", address);
+                }
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          });
+          resolve(stars);
         });
-    }
+      }
 
     /**
      * This method will return a Promise that will resolve with the list of errors when validating the chain.
