@@ -71,15 +71,17 @@ class Block {
         // Decoding the data to retrieve the JSON representation of the object
         // Parse the data to an object to be retrieve.
         let block=this;
-        return new Promise((resolve, reject) => {
-            if (block.height===0){
+        return new Promise(async (resolve, reject) => {
+            if (block.height == 0){
                 resolve('This is the genesis Block!');
             }
             // Resolve with the data if the object isn't the Genesis block
-            else {
-                let data = JSON.parse(hex2ascii(block.body));
+            let data = JSON.parse(hex2ascii(block.body));
+            if (data) {
                 resolve(data);
 
+            } else {
+                reject(Error("The Block has no data."));
             }
         });
     }
