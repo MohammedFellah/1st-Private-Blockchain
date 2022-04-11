@@ -228,7 +228,7 @@ class Blockchain {
                 if(height>0){
                     let checkHash = self.chain[height-1].hash;
                     if (block.previousBlockHash != checkHash){
-                        const errorMsg = `Block #${height}, previous Block Hash is set to ${block.previousBlockHash} but actual Previous black hash is ${checkHash}`;
+                        const errorMsg = `Block #${height}, previous Block Hash is set to ${checkHash} but actual Previous black hash is ${block.previousBlockHash}`;
                         errorLog.push(errorMsg);
                     }  
                 }
@@ -243,5 +243,5 @@ class Blockchain {
     }
 
 }
-
+//exporting the class
 module.exports.Blockchain = Blockchain;   
