@@ -131,5 +131,5 @@ class BlockchainController {
     }
 
 }
-
+//export module
 module.exports = (app, blockchainObj) => { return new BlockchainController(app, blockchainObj);}
